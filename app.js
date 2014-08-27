@@ -11,6 +11,14 @@ router.get('/', function (request, response) {
   response.render('index');
 });
 
+router.get('/about', function (request, response) {
+  response.render('about');
+});
+
+router.get('/resume', function (request, response) {
+  response.render('resume');
+});
+
 app.use('/', router);
 
 app.listen(3000)

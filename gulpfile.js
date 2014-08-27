@@ -5,7 +5,11 @@ var del = require('del'),
     uglify = require('gulp-uglify'),
     streamify = require('gulp-streamify'),
     browserify = require('browserify'),
-    source = require('vinyl-source-stream');
+    source = require('vinyl-source-stream'),
+    paths = {
+      styles: 'private/styles/*.scss',
+      scripts: 'private/scripts/*.js'
+    };
 
 gulp.task('default', ['styles', 'scripts']);
 
@@ -14,7 +18,7 @@ gulp.task('clean', function (callback) {
 });
 
 gulp.task('styles', ['clean'], function () {
-  return gulp.src('private/styles/*.scss')
+  return gulp.src(paths.styles)
          .pipe(sass())
          .pipe(minify_css())
          .pipe(gulp.dest('public/styles'));
@@ -27,3 +31,4 @@ gulp.task('scripts', ['clean'], function () {
          .pipe(streamify(uglify()))
          .pipe(gulp.dest('public/scripts'));
 });
+

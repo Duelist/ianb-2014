@@ -5,5 +5,27 @@ html(lang="en")
     block head
   body
     .container-fluid
-      block content
+        .row
+          .col-md-12
+            .profile
+              .row
+                .col-md-12
+                  .profile-wrap
+                    a(href="/")
+                      img.profile-img(src="https://secure.gravatar.com/avatar/9af44953c4379754fc2703b8c257264f?s=200")
+              .row
+                .col-md-12
+                  .profile-name
+                    | Ian Benedict
+                .col-md-12
+                  .profile-links
+                    a(href="/about")
+                      | About
+                    | &nbsp;
+                    a(href="/resume")
+                      | Resume
+        .row
+          .col-md-12
+            .content
+              block content
     script(src = "/static/scripts/main.js")

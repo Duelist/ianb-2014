@@ -1,8 +1,37 @@
 
 @import "../../bower_components/bootstrap-sass-official/assets/stylesheets/bootstrap.scss";
 
+.container-fluid {
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
 body {
-  padding-top: 20px;
-  padding-bottom: 20px;
+  font-family: Helvetica;
+  font-size: 16pt;
+}
+
+a {
+  text-decoration: underline;
+}
+
+.profile {
+  background-color: #353535;
+  color: #ffffff;
+  text-align: center;
+}
+
+.profile-wrap {
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+img.profile-img {
+  border-radius: 50%;
+}
+
+.content {
+  padding: 20px;
+  text-align: center;
 }
 
