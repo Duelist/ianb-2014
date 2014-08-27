@@ -1,0 +1,22 @@
+{
+  "name": "ianb-2014",
+  "version": "0.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://www.github.com/Duelist/ianb-2014"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.8.5"
+  },
+  "devDependencies": {
+    "gulp": "^3.8.7",
+    "gulp-sass": "^0.7.3"
+  }
+}
