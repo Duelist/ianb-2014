@@ -1,10 +1,6 @@
 
 (function () {
 
-  var type_to_tile = {
-    Github: GithubTile;
-  };
-
   var Tile = (function () {
     /*
       Expected format
@@ -31,8 +27,6 @@
       render: render
     }
   });
-  
-  var GithubTile = Object.create(Tile);
   
   var Tiler = (function () {
     function init() {

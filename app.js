@@ -1,5 +1,6 @@
 var express = require('express'),
     path = require('path'),
+    social_feed = require('./private/modules/social_feed/social_feed'),
     router = express.Router(),
     app = express();
 
@@ -20,6 +21,7 @@ router.get('/resume', function (request, response) {
 });
 
 app.use('/', router);
+app.use(social_feed);
 
 app.listen(3000)
 

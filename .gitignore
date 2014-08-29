@@ -1,3 +1,4 @@
 node_modules/
 bower_components/
 public/
+feed_settings.json
