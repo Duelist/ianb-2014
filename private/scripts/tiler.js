@@ -1,46 +1,31 @@
 
-(function () {
+var $ = require('../../bower_components/jquery/dist/jquery.min.js')
 
-  var Tile = (function () {
-    /*
-      Expected format
-  
-      {
-        post-type: "Github",
-        post-id: 1234,
-        author: "Duelist",
-        date-time: "2014-12-31 18:30pm",
-        message: "This is a test message."
-      }
-    */
-  
+module.exports = (function () {
+  this.Tiler = (function () {
+    var feed = [];
     function init() {
-  
+      $.ajax({
+        url: '/social',
+        type: 'GET',
+        success: function (data) {
+          var json_data = data;
+          feed = json_data;
+        }
+      });
     }
   
     function render() {
-  
+      var rendered_tiles = [],
+          tile = $('<div>');
+      console.log(feed[0]);
+      rendered_tiles.push(tile); 
+      console.log(rendered_tiles);
     }
   
     return {
       init: init,
       render: render
-    }
-  });
-  
-  var Tiler = (function () {
-    function init() {
-  
-    }
-  
-    function render() {
-  
-    }
-  
-    return {
-      init: init,
-      render: render
-    }
+    };
   }());
-
 }());

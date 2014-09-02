@@ -28,7 +28,7 @@ gulp.task('scripts', ['clean'], function () {
   return browserify('./private/scripts/main.js', { debug: true })
          .bundle()
          .pipe(source('main.js'))
-         .pipe(streamify(uglify()))
+//         .pipe(streamify(uglify()))
          .pipe(gulp.dest('public/scripts'));
 });
 
