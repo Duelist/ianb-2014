@@ -34,7 +34,7 @@ function clean_github_feed(body) {
     var messages = [];
 
     messages = obj.payload.commits;
-    messages.map(function () {
+    messages = messages.map(function (obj) {
       return obj.message;
     });
 
