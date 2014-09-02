@@ -9,7 +9,7 @@ var current_response;
 
 function handle_github_feed() {
   var options = {
-    'url': feed_settings.urls.github,
+    'url': feed_settings.github.url,
     headers: {
       'User-Agent': 'request'
     }
