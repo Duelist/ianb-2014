@@ -17,11 +17,19 @@ module.exports = (function () {
     }
 
     function render_tile(post) {
-      var tile = $('<div>')
-                 .addClass('tile'),
-          tile_content = $('<div>')
-                         .addClass('tile-content');
-      tile_content.html(post.messages.join(' '));
+      var tile = $('<div>').addClass('tile');
+      var tile_content = $('<div>').addClass('tile-content');
+
+      var tile_header_row = $('<div>').addClass('row');
+      var tile_header_username = $('<div>').addClass('col-xs-3');
+      var tile_header_date = $('<div>').addClass('col-xs-9');
+
+      var tile_footer_row = $('<div>').addClass('row');
+      var tile_footer_date = $('<div>')
+                             .addClass('col-xs-9')
+                             .addClass('text-left');
+
+      tile_content.html(post.messages.join('<br />'));
       tile.append(tile_content);
       return tile;
     }
