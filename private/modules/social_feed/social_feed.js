@@ -18,7 +18,6 @@ function handle_feed(type, response) {
 function configure_callback(type, current_response) {
   return function (error, response, body) {
     if (!error && response.statusCode === 200) {
-      // Get multiple feeds here and aggregate them
       current_response.send(clean_feed(type, JSON.parse(body)));
     }
   };
@@ -44,18 +43,45 @@ function clean_feed(type, body) {
         'post-type': type,
         'post-id': obj.id,
         'author': obj.actor.login,
-        'avatar_url': obj.actor.avatar_url,
+        'picture_url': obj.actor.avatar_url,
         'messages': messages,
         'datetime': obj.created_at
       };
     });
+  } else if (type === 'lastfm') {
+    var author = cleaned_body['recenttracks']['@attr']['user'];
+
+    cleaned_body = cleaned_body['recenttracks']['track'];
+
+    cleaned_body = cleaned_body.map(function (obj, index) {
+      var picture_url,
+          messages = [];
+      messages.push(obj['artist']['#text'] + ' - ' + obj.name);
+
+      picture_url = obj.image.filter(function (image) {
+        return image.size === "extralarge";
+      });
+
+      picture_url = picture_url[0]['#text'];
+
+      return {
+        'post-type': type,
+        'post-id': index,
+        'author': author,
+        'picture_url': picture_url,
+        'messages': messages,
+        'datetime': obj.date.uts
+      };
+    });
+  } else if (type === 'twitter') {
+    
   }
 
   return cleaned_body;
 }
 
 router.get('/', function (request, response) {
-  handle_feed('github', response);
+  handle_feed('lastfm', response);
 });
 
 app.use('/social', router);
