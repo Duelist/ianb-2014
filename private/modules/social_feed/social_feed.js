@@ -1,24 +1,36 @@
 var express = require('express'),
     path = require('path'),
     request = require('request'),
+    async = require('async'),
     feed_settings = require('../../../feed_settings.json'),
     router = express.Router(),
     app = module.exports = express();
 
-function handle_feed(type, response) {
+function handle_feeds(response) {
+  var feed_list = Object.keys(feed_settings);
+  async.map(feed_list, handle_feed, function (error, results) {
+    var feed_results = [];
+    if (!error) {
+      feed_results = feed_results.concat.apply(feed_results, results);
+      response.send(feed_results);
+    }
+  });
+}
+
+function handle_feed(type, callback) {
   var options = {
     'url': feed_settings[type]['url'],
     headers: {
       'User-Agent': 'request'
     }
   }
-  return request(options, configure_callback(type, response));
+  return request(options, configure_request_callback(type, callback));
 }
 
-function configure_callback(type, current_response) {
+function configure_request_callback(type, callback) {
   return function (error, response, body) {
     if (!error && response.statusCode === 200) {
-      current_response.send(clean_feed(type, JSON.parse(body)));
+      return callback(null, clean_feed(type, JSON.parse(body)));
     }
   };
 }
@@ -81,7 +93,7 @@ function clean_feed(type, body) {
 }
 
 router.get('/', function (request, response) {
-  handle_feed('lastfm', response);
+  handle_feeds(response);
 });
 
 app.use('/social', router);
