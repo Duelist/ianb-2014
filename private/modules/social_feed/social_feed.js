@@ -18,21 +18,62 @@ function handle_feeds(response) {
 }
 
 function handle_feed(type, callback) {
-  var options = {
-    'url': feed_settings[type]['url'],
-    headers: {
-      'User-Agent': 'request'
+  var oauth_options, options, api_key_and_secret, api_token;
+  if (type === 'twitter') {
+    api_key_and_secret = [feed_settings[type]['api_key'], feed_settings[type]['api_secret']].join(':');
+    api_token = new Buffer(api_key_and_secret).toString('base64');
+
+    oauth_options = {
+      url: feed_settings[type]['oauth_url'],
+      headers: {
+        'User-Agent': 'request',
+        'Authorization': 'Basic ' + api_token,
+        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+      },
+      body: 'grant_type=client_credentials' 
     }
+
+    request.post(oauth_options, function (error, response, body) {
+      var json_body;
+      if (!error && response.statusCode == 200) {
+        json_body = JSON.parse(body);
+        options = {
+          'url': feed_settings[type]['url'],
+          headers: {
+            'User-Agent': 'request',
+            'Authorization': 'Bearer ' + json_body['access_token']
+          }
+        };
+
+        return request(options, configure_request_callback(type, callback));
+      }
+    });
+  } else {
+    options = {
+      'url': feed_settings[type]['url'],
+      headers: {
+        'User-Agent': 'request'
+      }
+    };
+
+    return request(options, configure_request_callback(type, callback));
   }
-  return request(options, configure_request_callback(type, callback));
 }
 
 function configure_request_callback(type, callback) {
   return function (error, response, body) {
+    return callback(error, clean_feed(type, JSON.parse(body)));
+    /*
     if (!error && response.statusCode === 200) {
       return callback(null, clean_feed(type, JSON.parse(body)));
     }
+    */
   };
+}
+
+function get_request_options(type) {
+
+  return options;
 }
 
 function clean_feed(type, body) {
@@ -86,7 +127,20 @@ function clean_feed(type, body) {
       };
     });
   } else if (type === 'twitter') {
-    
+    cleaned_body = cleaned_body.map(function (obj) {
+      var messages = [];
+
+      messages.push(obj.text);
+
+      return {
+        'post-type': type,
+        'post-id': obj.id,
+        'author': obj.user.screen_name,
+        'picture_url': obj.user.username,
+        'messages': messages,
+        'datetime': obj.created_at
+      };
+    });
   }
 
   return cleaned_body;
