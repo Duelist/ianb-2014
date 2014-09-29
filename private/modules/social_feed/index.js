@@ -1,23 +1,34 @@
 var express = require('express'),
     path = require('path'),
+    fs = require('fs'),
     request = require('request'),
     async = require('async'),
-    feed_settings = require('../../../feed_settings.json'),
     router = express.Router(),
     app = module.exports = express();
 
 function handle_feeds(response) {
-  var feed_list = Object.keys(feed_settings);
+  var feed_list = [];
+
+  feed_list = fs.readdirSync(module_dir).map(function (file) {
+    return path.join(module_dir, '/', file);
+  });
+
   async.map(feed_list, handle_feed, function (error, results) {
     var feed_results = [];
     if (!error) {
-      feed_results = feed_results.concat.apply(feed_results, results);
-      response.send(feed_results);
+      feed_results = feed_results.concat.apply(results);
+      response.send(results);
     }
   });
 }
 
-function handle_feed(type, callback) {
+function handle_feed(path, callback) {
+  return request.get(path, function (error, response, body) {
+    callback(error, body);
+  });
+}
+
+function handle_feed_old(type, callback) {
   var oauth_options, options, api_key_and_secret, api_token;
   if (type === 'twitter') {
     api_key_and_secret = [feed_settings[type]['api_key'], feed_settings[type]['api_secret']].join(':');
@@ -48,60 +59,13 @@ function handle_feed(type, callback) {
         return request(options, configure_request_callback(type, callback));
       }
     });
-  } else {
-    options = {
-      'url': feed_settings[type]['url'],
-      headers: {
-        'User-Agent': 'request'
-      }
-    };
-
-    return request(options, configure_request_callback(type, callback));
   }
-}
-
-function configure_request_callback(type, callback) {
-  return function (error, response, body) {
-    return callback(error, clean_feed(type, JSON.parse(body)));
-    /*
-    if (!error && response.statusCode === 200) {
-      return callback(null, clean_feed(type, JSON.parse(body)));
-    }
-    */
-  };
-}
-
-function get_request_options(type) {
-
-  return options;
 }
 
 function clean_feed(type, body) {
   var cleaned_body = body;
 
-  if (type === 'github') {
-    cleaned_body = cleaned_body.filter(function (obj) {
-      return obj.type === "PushEvent";
-    });
-
-    cleaned_body = cleaned_body.map(function (obj) {
-      var messages = [];
-
-      messages = obj.payload.commits;
-      messages = messages.map(function (obj) {
-        return obj.message;
-      });
-
-      return {
-        'post-type': type,
-        'post-id': obj.id,
-        'author': obj.actor.login,
-        'picture_url': obj.actor.avatar_url,
-        'messages': messages,
-        'datetime': obj.created_at
-      };
-    });
-  } else if (type === 'lastfm') {
+  if (type === 'lastfm') {
     var author = cleaned_body['recenttracks']['@attr']['user'];
 
     cleaned_body = cleaned_body['recenttracks']['track'];
