@@ -11,9 +11,7 @@ function clean_feed(body) {
 
   cleaned_body = cleaned_body.filter(function (obj) {
     return obj.type === "PushEvent";
-  });
-
-  cleaned_body = cleaned_body.map(function (obj) {
+  }).map(function (obj) {
     var messages = [];
 
     messages = obj.payload.commits;
@@ -34,17 +32,17 @@ function clean_feed(body) {
   return cleaned_body;
 }
 
-router.get('/feed', function(request, response) {
-  options = {
+router.get('/feed', function(req, res) {
+  var options = {
     'url': settings['url'],
     headers: {
       'User-Agent': 'request'
     }
   };
 
-  request.get(settings['url'], function (error, response, body) {
-    response.send(clean_feed(JSON.parse(body)));
-  })
+  request.get(options, function (error, response, body) {
+    res.send(clean_feed(JSON.parse(body)));
+  });
 });
 
 app.use('/github', router);

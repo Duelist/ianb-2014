@@ -10,13 +10,11 @@ app.set('view engine', 'jade');
 app.use('/static', express.static(path.join(__dirname, '/public')));
 
 var module_dir = path.join(__dirname, 'private/modules/social_feed/plugins');
-fs.readdirSync(module_dir).map(function (file) {
-  var module_path = path.join(module_dir, '/', file);
-  fs.stat(module_path, function (err, stats) {
-    if (stats.isDirectory()) {
-      app.use(require(module_path));
-    }
-  });  
+fs.readdirSync(module_dir).filter(function (file) {
+  var stats = fs.lstatSync(path.join(module_dir, '/', file));
+  return stats.isDirectory();
+}).map(function (dir) {
+  app.use(require(path.join(module_dir, '/', dir)));
 });
 
 router.get('/', function (request, response) {
