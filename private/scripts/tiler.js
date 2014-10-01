@@ -9,7 +9,7 @@ module.exports = (function () {
         url: '/social',
         type: 'GET',
         success: function (data) {
-          var json_data = data;
+          var json_data = $.parseJSON(data);
           feed = json_data;
           render();
         }
@@ -36,7 +36,6 @@ module.exports = (function () {
   
     function render() {
       var rendered_tiles = [];
-      console.log(feed);
       rendered_tiles = feed.map(function (post) {
         return render_tile(post);
       });

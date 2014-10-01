@@ -10,16 +10,12 @@ function clean_feed(body) {
   var cleaned_body = body;
 
   cleaned_body = cleaned_body.map(function (obj) {
-    var messages = [];
-
-    messages.push(obj.text);
-
     return {
       'post-type': 'twitter',
       'post-id': obj.id,
       'author': obj.user.screen_name,
       'picture_url': obj.user.username,
-      'messages': messages,
+      'message': obj.text,
       'datetime': obj.created_at
     };
   });

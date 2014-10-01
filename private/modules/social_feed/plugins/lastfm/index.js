@@ -13,10 +13,9 @@ function clean_feed(body) {
   cleaned_body = cleaned_body['recenttracks']['track'];
 
   cleaned_body = cleaned_body.map(function (obj, index) {
-    var picture_url,
-        messages = [];
-
-    messages.push(obj['artist']['#text'] + ' - ' + obj.name);
+    var now_playing = false,
+        date_time,
+        picture_url;
 
     picture_url = obj.image.filter(function (image) {
       return image.size === "extralarge";
@@ -24,13 +23,24 @@ function clean_feed(body) {
 
     picture_url = picture_url[0]['#text'];
 
+    if (obj['@attr']) {
+      now_playing = obj['@attr']['nowplaying'];
+    }
+
+    if (now_playing) {
+      date_time = '';
+    } else {
+      date_time = obj.date.uts;
+    }
+
     return {
       'post-type': 'lastfm',
       'post-id': index,
       'author': author,
       'picture_url': picture_url,
-      'messages': messages,
-      'datetime': obj.date.uts
+      'message': obj['artist']['#text'] + ' - ' + obj.name,
+      'now_playing': now_playing,
+      'datetime': date_time
     };
   });
 

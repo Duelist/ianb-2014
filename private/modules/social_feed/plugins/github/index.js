@@ -20,7 +20,7 @@ function clean_feed(body) {
     });
 
     return {
-      'post-type': __dirname,
+      'post-type': 'github',
       'post-id': obj.id,
       'author': obj.actor.login,
       'picture_url': obj.actor.avatar_url,
