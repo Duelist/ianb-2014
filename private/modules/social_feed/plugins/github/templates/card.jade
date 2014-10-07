@@ -1,0 +1,12 @@
+.github-card.social-card-wrapper
+  .social-card
+    .date-time
+      | #{datetime}
+    .messages
+      each message in messages
+        .row(style="line-height:17px")
+          .col-md-4.hash
+            a(href="https://github.com/Duelist/ianb-2014/commit/#{message.sha}")
+              | #{message.sha_short}
+          .col-md-8.message
+            | #{message.message}
