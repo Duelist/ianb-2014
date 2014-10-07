@@ -3,43 +3,37 @@ var $ = require('../../bower_components/jquery/dist/jquery.min.js')
 
 module.exports = (function () {
   this.Tiler = (function () {
-    var feed = [];
     function init() {
       $.ajax({
         url: '/social',
         type: 'GET',
         success: function (data) {
-          var json_data = $.parseJSON(data);
-          feed = json_data;
-          render();
+          render(data);
         }
       });
     }
-
-    function render_tile(post) {
-      var tile = $('<div>').addClass('tile');
-      var tile_content = $('<div>').addClass('tile-content');
-
-      var tile_header_row = $('<div>').addClass('row');
-      var tile_header_username = $('<div>').addClass('col-xs-3');
-      var tile_header_date = $('<div>').addClass('col-xs-9');
-
-      var tile_footer_row = $('<div>').addClass('row');
-      var tile_footer_date = $('<div>')
-                             .addClass('col-xs-9')
-                             .addClass('text-left');
-
-      tile_content.html(post.messages.join('<br />'));
-      tile.append(tile_content);
-      return tile;
-    }
   
-    function render() {
-      var rendered_tiles = [];
+    function render(feed) {
+      var i,
+          tf = $('.tiled-feed').first(),
+          row = $('<div>').addClass('row');
+          rendered_tiles = [];
+
       rendered_tiles = feed.map(function (post) {
-        return render_tile(post);
+        return $(post);
       });
-      $('.tiled-feed').append(rendered_tiles);
+
+      for (i = 0; i < rendered_tiles.length; i++) {
+        /*
+        if (i % 4 === 0) {
+          tf.append(row);
+          // New row
+          row = $('<div>').addClass('row');
+        }
+        row.append(rendered_tiles[i].addClass('col-md-3'));
+        */
+        tf.append(rendered_tiles[i]);
+      }
     }
   
     return {
