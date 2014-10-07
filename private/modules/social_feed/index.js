@@ -3,6 +3,7 @@ var express = require('express'),
     fs = require('fs'),
     request = require('request'),
     async = require('async'),
+    moment = require('moment'),
     jade = require('jade'),
     router = express.Router(),
     app = module.exports = express();
@@ -24,22 +25,25 @@ router.get('/', function (request, response) {
     return path.join('/', dir, '/feed');
   });
 
+  console.time('async');
   async.map(feed_list, handle_feed, function (error, results) {
+    console.timeEnd('async');
     var feed_results = [];
     if (!error) {
       results = results.map(JSON.parse);
       feed_results = results.reduce(function (a, b) {
         return a.concat(b);
-      });
-
-      // TODO: Sort feed by datetime
-
-      // TODO: Render templates per feed
-      feed_results = feed_results.map(function (object) {
+      }).sort(function (a, b) {
+        var ma = moment(a.datetime),
+            mb = moment(b.datetime);
+        return -ma.diff(mb);
+      }).map(function (object) {
+        object.datetime = moment(object.datetime).format('MMMM D, YYYY');
+        return object;
+      }).map(function (object) {
         var template_path = path.join(module_dir, '/', object['post-type'], '/templates/card.jade');
         return jade.renderFile(template_path, object);
       });
-
       response.send(feed_results);
     }
   });

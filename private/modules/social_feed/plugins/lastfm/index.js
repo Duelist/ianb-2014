@@ -2,6 +2,7 @@ var express = require('express'),
     path = require('path'),
     request = require('request'),
     async = require('async'),
+    moment = require('moment'),
     settings = require('./settings.json'),
     router = express.Router(),
     app = module.exports = express();
@@ -30,7 +31,7 @@ function clean_feed(body) {
     if (now_playing) {
       date_time = '';
     } else {
-      date_time = obj.date.uts;
+      date_time = moment(obj['date']['#text'], 'D MMM YYYY, H:mm').format();
     }
 
     return {
@@ -38,7 +39,8 @@ function clean_feed(body) {
       'post-id': index,
       'author': author,
       'picture_url': picture_url,
-      'message': obj['artist']['#text'] + ' - ' + obj.name,
+      'artist': obj['artist']['#text'],
+      'title': obj.name,
       'now_playing': now_playing,
       'datetime': date_time
     };
@@ -55,8 +57,10 @@ router.get('/feed', function(req, res) {
     }
   };
 
+  console.time('lastfm');
   request.get(options, function (error, response, body) {
     res.send(clean_feed(JSON.parse(body)));
+    console.timeEnd('lastfm');
   });
 });
 

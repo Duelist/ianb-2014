@@ -2,6 +2,7 @@ var express = require('express'),
     path = require('path'),
     request = require('request'),
     async = require('async'),
+    moment = require('moment'),
     settings = require('./settings.json'),
     router = express.Router(),
     app = module.exports = express();
@@ -16,7 +17,7 @@ function clean_feed(body) {
       'author': obj.user.screen_name,
       'picture_url': obj.user.username,
       'message': obj.text,
-      'datetime': obj.created_at
+      'datetime': moment(obj.created_at, 'ddd MMM DD HH:mm:ss Z YYYY').format()
     };
   });
 
@@ -51,8 +52,10 @@ router.get('/feed', function(req, res) {
         }
       };
 
+      console.time('twitter');
       return request.get(options, function (error, response, body) {
         res.send(clean_feed(JSON.parse(body)));
+        console.timeEnd('twitter');
       });
     }
   });
