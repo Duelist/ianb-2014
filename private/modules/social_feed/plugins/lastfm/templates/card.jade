@@ -1,6 +1,20 @@
-.lastfm-card.social-card-wrapper
-  .social-card
-    .date-time
-      | #{datetime}
-    .message
-      | #{artist} - #{title}
+if picture_url == ''
+  .lastfm-card.social-card-wrapper
+    .social-card
+      .date-time
+        if now_playing == 'true'
+          | Now Playing
+        else
+          | #{datetime}
+      .message
+        | #{artist} - #{title}
+else
+  .lastfm-card.social-card-wrapper(style="background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('#{picture_url}'); background-position: center; background-size: 100%;")
+    .social-card
+      .date-time
+        if now_playing == 'true'
+          | Now Playing
+        else
+          | #{datetime}
+      .message
+        | #{artist} - #{title}

@@ -2,7 +2,8 @@ var express = require('express'),
     path = require('path'),
     request = require('request'),
     async = require('async'),
-    moment = require('moment'),
+    moment = require('moment-timezone'),
+    //moment_tz = require('moment-timezone'),
     settings = require('./settings.json'),
     router = express.Router(),
     app = module.exports = express();
@@ -31,7 +32,7 @@ function clean_feed(body) {
     if (now_playing) {
       date_time = '';
     } else {
-      date_time = moment(obj['date']['#text'], 'D MMM YYYY, H:mm').format();
+      date_time = moment(obj['date']['uts']*1000).format();
     }
 
     return {

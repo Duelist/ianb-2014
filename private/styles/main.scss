@@ -31,11 +31,15 @@ img.profile-img {
 }
 
 .content {
-  padding: 20px;
-  text-align: center;
+  padding: 110px;
 }
 
 // ------------------
+
+.tiled-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
 
 .tiled-feed {
   display: inline;
@@ -51,25 +55,26 @@ img.profile-img {
 .github-card.social-card-wrapper {
   background-color: #f7f7f7;
   color: #333;
-  width: 300px;
+  width: 350px;
 }
 
 .lastfm-card.social-card-wrapper {
   background-color: #e31b23;
-  color: #eeeeee;
-  width: 160px;
+  color: #ffffff;
+  width: 170px;
 }
 
 .twitter-card.social-card-wrapper {
-  background-color: #00aced;
-  color: #eeeeee;
-  width: 300px;
+  background-color: #59adeb;
+  color: #ffffff;
+  width: 350px;
 }
 
 .social-card {
   position: relative;
   display: table;
   width: 100%;
+  text-align: center;
 }
 
 .github-card .social-card {
@@ -77,11 +82,11 @@ img.profile-img {
 }
 
 .twitter-card .social-card {
-  height: 100px;
+  height: 150px;
 }
 
 .lastfm-card .social-card {
-  height: 100px;
+  height: 150px;
 }
 
 .date-time {
