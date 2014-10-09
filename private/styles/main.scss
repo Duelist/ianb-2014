@@ -31,7 +31,7 @@ img.profile-img {
 }
 
 .content {
-  padding: 110px;
+  padding: 105px;
 }
 
 // ------------------
@@ -70,6 +70,12 @@ img.profile-img {
   width: 350px;
 }
 
+.strava-card.social-card-wrapper {
+  background-color: #fc4c02;
+  color: #ffffff;
+  width: 350px;
+}
+
 .social-card {
   position: relative;
   display: table;
@@ -81,11 +87,15 @@ img.profile-img {
   height: 150px;
 }
 
+.lastfm-card .social-card {
+  height: 150px;
+}
+
 .twitter-card .social-card {
   height: 150px;
 }
 
-.lastfm-card .social-card {
+.strava-card .social-card {
   height: 150px;
 }
 
@@ -102,13 +112,19 @@ img.profile-img {
   font-size: 13px;
 }
 
+.lastfm-card .message {
+  display: table-cell;
+  vertical-align: middle;
+  font-size: 13px;
+}
+
 .twitter-card .message {
   display: table-cell;
   vertical-align: middle;
   font-size: 13px;
 }
 
-.lastfm-card .message {
+.strava-card .elapsed-time {
   display: table-cell;
   vertical-align: middle;
   font-size: 13px;

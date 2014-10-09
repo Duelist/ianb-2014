@@ -3,7 +3,6 @@ var express = require('express'),
     request = require('request'),
     async = require('async'),
     moment = require('moment-timezone'),
-    //moment_tz = require('moment-timezone'),
     settings = require('./settings.json'),
     router = express.Router(),
     app = module.exports = express();

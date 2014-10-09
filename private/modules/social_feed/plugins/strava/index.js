@@ -10,25 +10,14 @@ var express = require('express'),
 function clean_feed(body) {
   var cleaned_body = body;
 
-/*
-  cleaned_body = cleaned_body.map(function (obj) {
-    return {
-      'post-type': 'strava',
-      'post-id': obj.id,
-      'author': obj.user.screen_name,
-      'picture_url': obj.user.username,
-      'message': obj.text,
-      'datetime': moment(obj.created_at, 'ddd MMM DD HH:mm:ss Z YYYY').format()
-    };
-  });
-*/
   cleaned_body = cleaned_body.map(function (obj) {
     return {
       'post-type': 'strava',
       'post-id': obj.id,
       'name': obj.name,
       'distance': obj.distance,
-      'time': obj.elapsed_time
+      'elapsed_time': obj.elapsed_time,
+      'datetime': moment(obj.start_date_local).format()
     };
   });
 
